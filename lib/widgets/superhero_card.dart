@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
+import 'package:superheroes/resources/superheroes_images.dart';
 
 import '../blocs/main_bloc.dart';
 
@@ -26,7 +28,38 @@ class SuperheroCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Image.network(superheroInfo.imageUrl, width: 70, height: 70, fit: BoxFit.cover),
+            Container(
+              color: Colors.white24,
+              width: 70,
+              height: 70,
+              child: CachedNetworkImage(
+                  imageUrl: superheroInfo.imageUrl,
+                  progressIndicatorBuilder: (context, url, progress) {
+                    return Center(
+                      child: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          color: SuperheroesColors.blue,
+                          value: progress.progress,
+                        ),
+                      ),
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return Center(
+                      child: Image.asset(
+                        SuperHeroesImages.unknown,
+                        height: 62,
+                        width: 20,
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
+                  width: 70,
+                  height: 70,
+                  fit: BoxFit.cover),
+            ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
